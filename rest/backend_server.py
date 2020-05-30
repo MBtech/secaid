@@ -1,42 +1,49 @@
 from flask import Flask
+from flask_restx import Api, Resource
 import flask 
 
-app = Flask(__name__)
+flask_app = Flask(__name__)
+app = Api(app=flask_app)
 
-@app.route('/')
-def index():
-    return "Use one of the documented endpoints"
+namespace = app.namespace('portal/v1', description='Main APIs')
 
-@app.route('/portal/v1/login', methods=['POST'])
-def login():
-    return "User login logic goes here"
+@namespace.route("/login")
+class Login(Resource):
+    def post(self, id):
+        return "User login logic goes here"
 
-@app.route('/portal/v1/signup', methods=['POST'])
-def signup():
-    return "User login logic goes here"
+@namespace.route("/signup")
+class Signup(Resource):
+    def post(self, id):
+        return "User signup logic goes here"
 
-@app.route('/portal/v1/topics', methods=['GET', 'POST'])
-def topics():
-    if flask.request.method == 'GET':
+@namespace.route('/topics')
+class Topics(Resource):
+    def get(self, topic_id):
         return "Return the topic list as json"
-    else:
+    def post(self, topic_id):
         return "Create a topic"
 
-@app.route('/portal/v1/datasets', methods=['GET'])
-def datasets():
-    return "Return a list of the available datasets and their metadata as json"
+@namespace.route('/datasets')
+class Datasets(Resource):
+    def get(self, dataset_id):
+        return "Return a list of the available datasets and their metadata as json"
 
-@app.route('/portal/v1/quota', methods=['GET'])
-def quota():
-    return "Return quota information"
+@namespace.route('/quota')
+class Quota(Resource):
+    def get(self, id):
+        return "Return quota information"
 
-@app.route('/portal/v1/job', methods=['POST'])
-def job():
-    return "Submit a job"
+@namespace.route('/job')
+class Job(Resource):
+    def post(self, job_id):
+        return "Submit a job"
 
-@app.route('/portal/v1/result', methods=['GET'])
-def result():
-    return "Return the results of a job based on the job id"
+
+@namespace.route('/result')
+class Results(Resource):
+    def get(self, job_id):
+        return "Return the results of a job based on the job id"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    flask_app.run(debug=True)
