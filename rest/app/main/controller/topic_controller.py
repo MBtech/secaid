@@ -10,9 +10,10 @@ _topic = TopicDto.topic
 
 
 @api.route('/')
-class UserList(Resource):
+class TopicList(Resource):
     @api.doc('list of available topics')
     @api.marshal_list_with(_topic, envelope='data')
+    @token_required
     def get(self):
         """List all available topics"""
         return get_all_topics()
@@ -20,6 +21,7 @@ class UserList(Resource):
     @api.response(201, 'New Kafka topic Created.')
     @api.doc('create a new Kafka topic')
     @api.expect(_topic, validate=True)
+    @token_required
     def post(self):
         """Creates a new Kafka Topic """
         data = request.json

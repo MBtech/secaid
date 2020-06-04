@@ -2,11 +2,9 @@
 Working in progress backend REST Server for SE-CAID Platform
 
 ## Folder Structure
-`model`: contains all out database models
-
-`service`: contains all the business logic
-
-`controller`: contains all out application end points
+- `model`: contains all out database models
+- `service`: contains all the business logic
+- `controller`: contains all out application end points
 
 
 ## Installation 
@@ -37,6 +35,8 @@ Apply the migration script to the database
 - Get Quota Information
 
 ## TODO:
+- Add model and update app logic for topic related operations
+- Add model and update app logic for job related operations
 - Enable SSL/TLS for backend server
 - Stream result set or dataset to user
 

@@ -38,29 +38,102 @@
                 ]
             }
         },
-        "/topic/": {
+        "/job/list/all": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/job"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "List all jobs",
+                "operationId": "List of jobs for the user",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "job"
+                ]
+            }
+        },
+        "/job/list/{job_id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The Job identifier",
+                    "name": "job_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "404": {
+                        "description": "Job not found."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/job"
+                        }
+                    }
+                },
+                "summary": "Retrieve job info by Id",
+                "operationId": "Retrieve job info by Id",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "job"
+                ]
+            }
+        },
+        "/job/submit": {
             "post": {
                 "responses": {
                     "201": {
-                        "description": "New Kafka topic Created."
+                        "description": "New Job Created."
                     }
                 },
-                "summary": "Creates a new Kafka Topic",
-                "operationId": "create a new Kafka topic",
+                "summary": "Creates a new Analytics job",
+                "operationId": "create a new analytics job",
                 "parameters": [
                     {
                         "name": "payload",
                         "required": true,
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/topic_details"
+                            "$ref": "#/definitions/job"
                         }
                     }
                 ],
                 "tags": [
-                    "topic"
+                    "job"
                 ]
-            },
+            }
+        },
+        "/topic/": {
             "get": {
                 "responses": {
                     "200": {
@@ -91,31 +164,31 @@
                 "tags": [
                     "topic"
                 ]
-            }
-        },
-        "/user/": {
+            },
             "post": {
                 "responses": {
                     "201": {
-                        "description": "User successfully created."
+                        "description": "New Kafka topic Created."
                     }
                 },
-                "summary": "Creates a new User",
-                "operationId": "create a new user",
+                "summary": "Creates a new Kafka Topic",
+                "operationId": "create a new Kafka topic",
                 "parameters": [
                     {
                         "name": "payload",
                         "required": true,
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/user"
+                            "$ref": "#/definitions/topic_details"
                         }
                     }
                 ],
                 "tags": [
-                    "user"
+                    "topic"
                 ]
-            },
+            }
+        },
+        "/user/": {
             "get": {
                 "responses": {
                     "200": {
@@ -141,6 +214,28 @@
                         "type": "string",
                         "format": "mask",
                         "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "user"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "User successfully created."
+                    }
+                },
+                "summary": "Creates a new User",
+                "operationId": "create a new user",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
                     }
                 ],
                 "tags": [
@@ -210,6 +305,10 @@
         {
             "name": "topic",
             "description": "Kafka topics related operations"
+        },
+        {
+            "name": "job",
+            "description": "Analytics job related operations"
         }
     ],
     "definitions": {
@@ -264,6 +363,23 @@
                 "topic_name": {
                     "type": "string",
                     "description": "Kafka Topic name"
+                }
+            },
+            "type": "object"
+        },
+        "job": {
+            "required": [
+                "job_framework",
+                "job_name"
+            ],
+            "properties": {
+                "job_name": {
+                    "type": "string",
+                    "description": "Job name"
+                },
+                "job_framework": {
+                    "type": "string",
+                    "description": "Framework to run the job on"
                 }
             },
             "type": "object"

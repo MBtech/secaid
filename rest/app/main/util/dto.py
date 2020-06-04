@@ -26,3 +26,12 @@ class TopicDto:
     topic = api.model('topic_details', {
         'topic_name': fields.String(required=True, description='Kafka Topic name'),
     })
+
+# DTO for Job object
+class JobDto:
+    api = Namespace('job', description='Analytics job related operations')
+    job = api.model('job', {
+        'job_name': fields.String(required=True, description='Job name'),
+        'job_framework': fields.String(required=True, description='Framework to run the job on'),
+        
+    })
