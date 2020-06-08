@@ -7,17 +7,18 @@ from ..util.decorator import token_required
 
 api = JobDto.api
 _job = JobDto.job
+job_parser = JobDto.job_upload_parser
 
 
 @api.route('/submit')
 class SubmitJob(Resource):
     @api.response(201, 'New Job Created.')
     @api.doc('create a new analytics job')
-    @api.expect(_job, validate=True)
+    @api.expect(job_parser, validate=True)
     @token_required
     def post(self):
         """Creates a new Analytics job """
-        data = request.json
+        data = job_parser.parse_args()
         return create_new_job(data=data)
 
 @api.route('/list/all')

@@ -1,4 +1,5 @@
 from flask_restx import Namespace, fields
+from werkzeug.datastructures import FileStorage 
 
 # Data Transfer Object (DTO) for marshalling data for our API calls
 
@@ -34,4 +35,17 @@ class JobDto:
         'job_name': fields.String(required=True, description='Job name'),
         'job_framework': fields.String(required=True, description='Framework to run the job on'),
         
+    })
+    job_upload_parser = api.parser()
+    job_upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
+    job_upload_parser.add_argument('framework', location='form', type=str, help="Framework for the job", required=True)
+    job_upload_parser.add_argument('name', location='form', type=str, help="Name of the job", required=True)
+
+
+# DTO for Quota object
+class QuotaDto:
+    api = Namespace('quota', description='Analytics job related operations')
+    job = api.model('quota', {
+        'job_name': fields.String(required=True, description='Job name'),
+        'job_framework': fields.String(required=True, description='Framework to run the job on'),
     })
