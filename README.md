@@ -1,5 +1,3 @@
-https://travis-ci.com/MBtech/secaid.svg?branch=master
-
 # Application Logic for SE-CAID
 **NOTE:** This is a very much work in progress
 
