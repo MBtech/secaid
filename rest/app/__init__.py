@@ -9,9 +9,9 @@ from .main.controller.job_controller import api as job_ns
 blueprint = Blueprint('api', __name__)
 
 api = Api(blueprint,
-          title='SECAID REST SERVER BOILER-PLATE WITH JWT',
+          title='SECAID REST SERVER',
           version='0.1a',
-          description='a boilerplate for se-caid rest server'
+          description='A WIP backend rest server for SE-CAID' 
           )
 
 api.add_namespace(user_ns, path='/user')

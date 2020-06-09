@@ -41,4 +41,6 @@ Apply the migration script to the database
 - Stream result set or dataset to user
 
 ## Notes
+- Should we have security check for the tar files uploaded for jobs
 - Right now SQL Lite database is being used during development
+- The file storage parser is using werkzeug FileStorage which might need to be changed for production server

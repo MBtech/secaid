@@ -26,6 +26,12 @@ class TopicDto:
     api = Namespace('topic', description='Kafka topics related operations')
     topic = api.model('topic_details', {
         'topic_name': fields.String(required=True, description='Kafka Topic name'),
+        'topic_schema': fields.String(required=True, description='Kafka Topic Avro Schema'),
+        'partitions': fields.Integer(1, description='Number of partitions for the Kafka topic'),
+        'replication_factor': fields.Integer(1, description='Replication factor for the Kafka topic')
+    })
+    schema = api.model('topic_schema', {
+        'topic_schema': fields.String(required=True, description='Kafka Topic Avro Schema'),
     })
 
 # DTO for Job object
