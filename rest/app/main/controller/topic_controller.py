@@ -30,7 +30,7 @@ class CreateTopic(Resource):
         data = request.json
         return create_new_topic(data=data)
 
-@api.route('/schema/<string:topic_name>')
+@api.route('/<string:topic_name>/schema')
 @api.param('topic_name', 'Topic name')
 @api.response(404, 'Topic not found.')
 class GetSchema(Resource):    

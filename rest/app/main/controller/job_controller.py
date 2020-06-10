@@ -21,7 +21,7 @@ class SubmitJob(Resource):
         data = job_parser.parse_args()
         return create_new_job(data=data)
 
-@api.route('/list/all')
+@api.route('/info')
 class JobInfoAll(Resource):
     @api.doc('List of jobs for the user')
     @api.marshal_list_with(_job, envelope='data')
@@ -31,7 +31,7 @@ class JobInfoAll(Resource):
         return get_all_jobs()
 
     
-@api.route('/list/<int:job_id>')
+@api.route('/<int:job_id>/info')
 @api.param('job_id', 'The Job identifier')
 @api.response(404, 'Job not found.')
 class JobInfo(Resource):
@@ -40,6 +40,21 @@ class JobInfo(Resource):
     @token_required
     def get(self, job_id):
         """Retrieve job info by Id"""
+        job_info = get_job_by_id(job_id)
+        if not job_info:
+            api.abort(404)
+        else:
+            return job_info
+
+@api.route('/<int:job_id>/result')
+@api.param('job_id', 'The Job identifier')
+@api.response(404, 'Job not found.')
+class JobInfo(Resource):
+    @api.doc('Retrieve job result by Job Id')
+    @api.marshal_with(_job)
+    @token_required
+    def get(self, job_id):
+        """Retrieve job result by Job ID"""
         job_info = get_job_by_id(job_id)
         if not job_info:
             api.abort(404)

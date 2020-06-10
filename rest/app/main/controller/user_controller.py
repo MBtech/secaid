@@ -10,11 +10,11 @@ _user = UserDto.user
 
 @api.route('/')
 class UserList(Resource):
-    @api.doc('List of registered users')
-    @api.marshal_list_with(_user, envelope='data')
-    def get(self):
-        """List all registered users"""
-        return get_all_users()
+    # @api.doc('List of registered users')
+    # @api.marshal_list_with(_user, envelope='data')
+    # def get(self):
+    #     """List all registered users"""
+    #     return get_all_users()
 
     @api.response(201, 'User successfully created.')
     @api.doc('create a new user')

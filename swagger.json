@@ -38,7 +38,7 @@
                 ]
             }
         },
-        "/job/list/all": {
+        "/job/info": {
             "get": {
                 "responses": {
                     "200": {
@@ -57,44 +57,6 @@
                 },
                 "summary": "List all jobs",
                 "operationId": "List of jobs for the user",
-                "parameters": [
-                    {
-                        "name": "X-Fields",
-                        "in": "header",
-                        "type": "string",
-                        "format": "mask",
-                        "description": "An optional fields mask"
-                    }
-                ],
-                "tags": [
-                    "job"
-                ]
-            }
-        },
-        "/job/list/{job_id}": {
-            "parameters": [
-                {
-                    "in": "path",
-                    "description": "The Job identifier",
-                    "name": "job_id",
-                    "required": true,
-                    "type": "integer"
-                }
-            ],
-            "get": {
-                "responses": {
-                    "404": {
-                        "description": "Job not found."
-                    },
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/job"
-                        }
-                    }
-                },
-                "summary": "Retrieve job info by Id",
-                "operationId": "Retrieve job info by Id",
                 "parameters": [
                     {
                         "name": "X-Fields",
@@ -148,29 +110,83 @@
                 ]
             }
         },
-        "/topic/": {
-            "post": {
+        "/job/{job_id}/info": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The Job identifier",
+                    "name": "job_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "get": {
                 "responses": {
-                    "201": {
-                        "description": "New Kafka topic Created."
+                    "404": {
+                        "description": "Job not found."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/job"
+                        }
                     }
                 },
-                "summary": "Creates a new Kafka Topic",
-                "operationId": "create a new Kafka topic",
+                "summary": "Retrieve job info by Id",
+                "operationId": "Retrieve job info by Id",
                 "parameters": [
                     {
-                        "name": "payload",
-                        "required": true,
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/topic_details"
-                        }
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
                     }
                 ],
                 "tags": [
-                    "topic"
+                    "job"
                 ]
-            },
+            }
+        },
+        "/job/{job_id}/result": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "The Job identifier",
+                    "name": "job_id",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "404": {
+                        "description": "Job not found."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/job"
+                        }
+                    }
+                },
+                "summary": "Retrieve job result by Job ID",
+                "operationId": "Retrieve job result by Job Id",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "job"
+                ]
+            }
+        },
+        "/topic/": {
             "get": {
                 "responses": {
                     "200": {
@@ -203,6 +219,75 @@
                 ]
             }
         },
+        "/topic/create": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "New Kafka topic Created."
+                    }
+                },
+                "summary": "Creates a new Kafka Topic",
+                "operationId": "create a new Kafka topic",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/topic_details"
+                        }
+                    }
+                ],
+                "tags": [
+                    "topic"
+                ]
+            }
+        },
+        "/topic/{topic_name}/schema": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "description": "Topic name",
+                    "name": "topic_name",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "404": {
+                        "description": "Topic not found."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/topic_schema"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Topic Schema returned."
+                    }
+                },
+                "summary": "Return the scheme of a kafka topic",
+                "operationId": "return the schema of a kafka topic",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "topic"
+                ]
+            }
+        },
         "/user/": {
             "post": {
                 "responses": {
@@ -220,37 +305,6 @@
                         "schema": {
                             "$ref": "#/definitions/user"
                         }
-                    }
-                ],
-                "tags": [
-                    "user"
-                ]
-            },
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "properties": {
-                                "data": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/user"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "summary": "List all registered users",
-                "operationId": "List of registered users",
-                "parameters": [
-                    {
-                        "name": "X-Fields",
-                        "in": "header",
-                        "type": "string",
-                        "format": "mask",
-                        "description": "An optional fields mask"
                     }
                 ],
                 "tags": [
@@ -298,9 +352,9 @@
         }
     },
     "info": {
-        "title": "SECAID REST SERVER BOILER-PLATE WITH JWT",
+        "title": "SECAID REST SERVER",
         "version": "0.1a",
-        "description": "a boilerplate for se-caid rest server"
+        "description": "A WIP backend rest server for SE-CAID"
     },
     "produces": [
         "application/json"
@@ -372,12 +426,39 @@
         },
         "topic_details": {
             "required": [
-                "topic_name"
+                "topic_name",
+                "topic_schema"
             ],
             "properties": {
                 "topic_name": {
                     "type": "string",
                     "description": "Kafka Topic name"
+                },
+                "topic_schema": {
+                    "type": "string",
+                    "description": "Kafka Topic Avro Schema"
+                },
+                "partitions": {
+                    "type": "integer",
+                    "description": "Number of partitions for the Kafka topic",
+                    "default": 1
+                },
+                "replication_factor": {
+                    "type": "integer",
+                    "description": "Replication factor for the Kafka topic",
+                    "default": 1
+                }
+            },
+            "type": "object"
+        },
+        "topic_schema": {
+            "required": [
+                "topic_schema"
+            ],
+            "properties": {
+                "topic_schema": {
+                    "type": "string",
+                    "description": "Kafka Topic Avro Schema"
                 }
             },
             "type": "object"
