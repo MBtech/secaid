@@ -100,6 +100,41 @@
                         "type": "string",
                         "required": true,
                         "description": "Name of the job"
+                    },
+                    {
+                        "name": "numExecutors",
+                        "in": "formData",
+                        "type": "integer",
+                        "required": true,
+                        "description": "Number of Executors"
+                    },
+                    {
+                        "name": "executorCores",
+                        "in": "formData",
+                        "type": "integer",
+                        "description": "Number of Cores per Executor",
+                        "default": 2
+                    },
+                    {
+                        "name": "executorMemory",
+                        "in": "formData",
+                        "type": "string",
+                        "description": "Amount of memory per executor",
+                        "default": "4g"
+                    },
+                    {
+                        "name": "driverrMemory",
+                        "in": "formData",
+                        "type": "string",
+                        "description": "Amount of memory for driver",
+                        "default": "4g"
+                    },
+                    {
+                        "name": "driverrCores",
+                        "in": "formData",
+                        "type": "integer",
+                        "description": "Number of cores for driver",
+                        "default": 1
                     }
                 ],
                 "consumes": [
@@ -192,14 +227,7 @@
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "properties": {
-                                "data": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/topic_details"
-                                    }
-                                }
-                            }
+                            "$ref": "#/definitions/topic_list"
                         }
                     }
                 },
@@ -420,6 +448,18 @@
                 "password": {
                     "type": "string",
                     "description": "The user password "
+                }
+            },
+            "type": "object"
+        },
+        "topic_list": {
+            "properties": {
+                "topic_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "description": "Kafka Topic name"
+                    }
                 }
             },
             "type": "object"

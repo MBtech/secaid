@@ -30,6 +30,11 @@ class TopicDto:
         'partitions': fields.Integer(1, description='Number of partitions for the Kafka topic'),
         'replication_factor': fields.Integer(1, description='Replication factor for the Kafka topic')
     })
+
+    topic_list = api.model('topic_list', {
+        'topic_names': fields.List(fields.String(description='Kafka Topic name'))
+    })
+
     schema = api.model('topic_schema', {
         'topic_schema': fields.String(required=True, description='Kafka Topic Avro Schema'),
     })
@@ -46,6 +51,12 @@ class JobDto:
     job_upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
     job_upload_parser.add_argument('framework', location='form', type=str, help="Framework for the job", required=True)
     job_upload_parser.add_argument('name', location='form', type=str, help="Name of the job", required=True)
+    job_upload_parser.add_argument('numExecutors', location='form', type=int, help="Number of Executors", required=True)
+    job_upload_parser.add_argument('executorCores', location='form', type=int, help="Number of Cores per Executor", required=False, default=2)
+    job_upload_parser.add_argument('executorMemory', location='form', type=str, help="Amount of memory per executor", required=False, default="4g")
+    job_upload_parser.add_argument('driverrMemory', location='form', type=str, help="Amount of memory for driver", required=False, default="4g")
+    job_upload_parser.add_argument('driverrCores', location='form', type=int, help="Number of cores for driver", required=False, default=1)
+
 
 
 # DTO for Quota object

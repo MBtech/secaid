@@ -1,0 +1,7 @@
+{
+    "mongo_ip" : "localhost",
+    "mongo_port": 27017,
+    "mongo_username": "admin",
+    "mongo_password": "admin", 
+    "database": "dbname"
+}
