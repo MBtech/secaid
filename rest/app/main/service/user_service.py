@@ -1,9 +1,22 @@
 import uuid
 import datetime
+import json
+from pymongo import MongoClient
 
 from app.main import db
 from app.main.model.user import User
 
+
+def get_quota_info(data):
+    # Access quota collection
+    quotas = db['quotas']
+    user_quota_info = quotas.find_one({"id": data["user_id"]})
+    return user_quota_info, 200
+    # response_object = {
+    #         'status': 'Success',
+    #         'message': 'This stub is empty at the moment',
+    #     }
+    # return response_object, 200
 
 def save_new_user(data):
     user = User.query.filter_by(email=data['email']).first()
@@ -54,3 +67,17 @@ def generate_token(user):
             'message': 'Some error occurred. Please try again.'
         }
         return response_object, 401
+
+
+config = json.load(open("config.json"))
+mongo_host_ip = config["mongo_ip"]
+mongo_host_port = config["mongo_port"]
+username = config["mongo_username"]
+password = config["mongo_password"]
+database = config["database"]
+client = MongoClient(host=mongo_host_ip, port=mongo_host_port,
+                    # username = username,
+                    # password = password,
+                    # authSource=database
+                    )
+db = client[database]

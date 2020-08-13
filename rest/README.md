@@ -20,9 +20,16 @@ Create a migration script from detected changes in the model
 Apply the migration script to the database
 `python manage.py db upgrade`
 
+Build the docker image: `docker image build -t secaid .`
+
+Run the containers: `docker run -p 5000:5000 -d secaid`
+
 
 ## Testing 
 `python manage.py test`
+
+## Start server
+`python manage.py run`
 
 ## Resources to expose
 - Account login
@@ -35,10 +42,12 @@ Apply the migration script to the database
 - Get Quota Information
 
 ## TODO:
-- Add model and update app logic for topic related operations
-- Add model and update app logic for job related operations
 - Enable SSL/TLS for backend server
 - Stream result set or dataset to user
+- Celery workers to off-load job execution
+
+## Common Problems
+- Make sure that the flask app is bound to `0.0.0.0` instead of `127.0.0.1` in the docker container ([ref](https://stackoverflow.com/questions/39525820/docker-port-forwarding-not-working))
 
 ## Notes
 - Should we have security check for the tar files uploaded for jobs

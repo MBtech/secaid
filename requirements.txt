@@ -94,3 +94,4 @@ zipp==0.6.0
 avro-python3
 kafka-python
 pytest
+pymongo
