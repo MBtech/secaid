@@ -19,8 +19,14 @@ def submit_job(data):
         driver_memory=data["driver_memory"],
         num_executors=data["num_executors"]
     )
+    batch.wait()
+    ## How do we get the execution time of the job?
+    ## Request to Spark history server or by measuring the time here?
+
+    
 
 def create_new_job(data):
+    ## Currently done with multiprocessing but if high traffic is expected it should be Celery with RabbitMQ and Redis
     job = Process(target=submit_job, daemon=True, args=(data))
     job.start()
     response_object = {

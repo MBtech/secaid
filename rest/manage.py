@@ -11,6 +11,9 @@ from app.main.model import user
 from app.main.model import blacklist
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
+# app.config.from_object('app.util.keycloak_settings')
+app.config.from_envvar('KEYCLOAK_FLASK_SETTINGS')
+
 app.register_blueprint(blueprint)
 
 app.app_context().push()

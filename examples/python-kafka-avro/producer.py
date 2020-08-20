@@ -7,16 +7,18 @@ from kafka import KafkaClient
 from kafka.admin import KafkaAdminClient, NewTopic
 import pandas as pd
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
+brokers = ['kafka.se-caid.org:9092']
+
+producer = KafkaProducer(bootstrap_servers=brokers)
 topic_name = "traffic-data"
 
-client = KafkaClient(bootstrap_servers=['localhost:9092'])
+client = KafkaClient(bootstrap_servers=brokers)
 future = client.cluster.request_update()
 client.poll(future=future)
 metadata = client.cluster
 print(metadata.topics())
 if topic_name not in metadata.topics():
-    admin_client = KafkaAdminClient(bootstrap_servers=['localhost:9092'])
+    admin_client = KafkaAdminClient(bootstrap_servers=brokers)
 
     topic_list = []
     topic_list.append(NewTopic(name=topic_name, num_partitions=1, replication_factor=1))
@@ -32,7 +34,7 @@ data = pd.read_csv('traffic_data.csv')
 print(producer.bootstrap_connected())
 
 for index, row in data.iterrows():
-    # print(row)
+    print(row)
     writer = DatumWriter(schema)
     bytes_writer = io.BytesIO()
     encoder = avro.io.BinaryEncoder(bytes_writer)
@@ -41,6 +43,6 @@ for index, row in data.iterrows():
     raw_bytes = bytes_writer.getvalue()
     # print(raw_bytes)
     future = producer.send(topic_name, raw_bytes)
+    result = future.get(timeout=300)
 
 producer.flush()
-# result = future.get(timeout=300)

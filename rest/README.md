@@ -24,6 +24,12 @@ Build the docker image: `docker image build -t secaid .`
 
 Run the containers: `docker run -p 5000:5000 -d secaid`
 
+Make sure you have `Direct Access Grants Enabled` in the settings of the keycloak Client ID that you are using
+
+Set Keycloak setting based on the template in `app/main/util/keycloak_settings.py`
+
+Set `export KEYCLOAK_FLASK_SETTINGS=local_settings.py` to point to the keycloak settings file 
+
 
 ## Testing 
 `python manage.py test`

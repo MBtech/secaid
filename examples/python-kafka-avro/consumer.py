@@ -3,10 +3,13 @@ import avro.schema
 import avro.io
 from kafka import KafkaConsumer
 
+brokers = ['kafka.se-caid.org:9092']
+
 # To consume messages
-CONSUMER = KafkaConsumer('traffic-data',
-                         group_id='my_group',
-                         bootstrap_servers=['localhost:9092'])
+CONSUMER = KafkaConsumer("traffic-data",
+                        #  group_id='my-group',
+                        auto_offset_reset = 'earliest',
+                         bootstrap_servers=brokers)
 
 SCHEMA_PATH = "traffic.avsc"
 SCHEMA = avro.schema.parse(open(SCHEMA_PATH).read())

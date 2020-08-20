@@ -1,0 +1,11 @@
+{
+	"namespace": "traffic.avro",
+	"type": "record",
+	"name": "TrafficData",
+	"fields": [
+		{"name": "date", "type": "string"},
+		{"name": "source",  "type": ["int", "null"]},
+		{"name": "target", "type": ["int", "null"]},
+		{"name": "nflows", "type": ["int", "null"]}
+	]
+}

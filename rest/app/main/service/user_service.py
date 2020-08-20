@@ -1,10 +1,86 @@
 import uuid
 import datetime
 import json
+import logging
 from pymongo import MongoClient
 
 from app.main import db
 from app.main.model.user import User
+
+from flask import Flask, request, render_template, redirect, flash, url_for
+from flask import session, make_response, g
+from flask import current_app
+
+from ..util.keycloak_utils import get_admin, create_user, get_oidc, get_token, check_token
+
+
+# logging.basicConfig(level=logging.DEBUG)
+
+# @app.before_request
+def load_user():
+    g.username = session.get('username')
+    g.access_token = session.get('access_token')
+
+
+# @app.route('/login', methods=['GET', 'POST'])
+def login(data):
+    oidc_obj = get_oidc()
+    token = get_token(oidc_obj, data["username"], data["password"])
+    print("\nTOKEN: %s\n" % token)
+    # response = make_response(redirect(url_for('home')))
+    if token:
+        # response.set_cookie('access_token', token['access_token'])
+        session['access_token'] = token['access_token']
+        session['username'] = data["username"]
+    response_object = {
+            'status': 'success',
+            'message': 'Successfully logged in'
+        }
+    return response_object, 201
+
+
+# @app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('access_token', None)
+    response_object = {
+            'status': 'success',
+            'message': 'Successfully logged out'
+        }
+    return response_object, 201
+
+
+
+# @app.route('/register', methods=['GET', 'POST'])
+def register(data):
+    print(data)
+    admin = get_admin()
+    
+    create_user(admin, data["username"], data["email"], data["password"])
+    flash('Thanks for registering')
+    response_object = {
+            'status': 'success',
+            'message': 'Successfully registered.'
+        }
+    return response_object, 201
+
+
+# @app.route('/headers')
+def headers():
+    return dict(request.headers)
+
+
+# @app.route('/protected')
+# def protected():
+#     ingress_host = current_app.config.get('INGRESS_HOST')
+#     resp = 'Forbidden!'
+#     access_token = session.get('access_token')
+#     if access_token:
+#         if check_token(access_token):
+#             headers = {'Authorization': 'Bearer ' + access_token}
+#             r = requests.get(ingress_host, headers=headers)
+#             resp = 'Protected resource is accessible. Yay! Here is the response: %s' % str(r.text)
+#     return resp
 
 
 def get_quota_info(data):

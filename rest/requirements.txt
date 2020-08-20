@@ -96,3 +96,4 @@ kafka-python
 pytest
 pymongo
 livy
+python-keycloak
