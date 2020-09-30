@@ -3,11 +3,10 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: nginx
-  tag: stable
+  repository: mbilalce/secaid
   pullPolicy: IfNotPresent
 service:
-  name: nginx
+  name: secaid
   externalPort: 80
   internalPort: 5000
 ingress:
@@ -16,10 +15,14 @@ ingress:
   hosts:
     - chart-example.local
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: secaid
     kubernetes.io/tls-acme: "true"
   tls:
     - secretName: chart-example-tls
       hosts:
        - chart-example.local
-resources: {}
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

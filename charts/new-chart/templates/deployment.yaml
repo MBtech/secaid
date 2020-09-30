@@ -9,6 +9,9 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
+    selector:
+    matchLabels:
+      {{- include "flask-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
