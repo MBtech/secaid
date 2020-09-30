@@ -20,9 +20,7 @@ Create a migration script from detected changes in the model
 Apply the migration script to the database
 `python manage.py db upgrade`
 
-Build the docker image: `docker image build -t secaid .`
-
-Run the containers: `docker run -p 5000:5000 -d secaid`
+Build and push the docker image: `cd rest; ./build_and_push.sh`
 
 Make sure you have `Direct Access Grants Enabled` in the settings of the keycloak Client ID that you are using
 
@@ -59,3 +57,8 @@ Set `export KEYCLOAK_FLASK_SETTINGS=local_settings.py` to point to the keycloak 
 - Should we have security check for the tar files uploaded for jobs
 - Right now SQL Lite database is being used during development
 - The file storage parser is using werkzeug FileStorage which might need to be changed for production server
+
+
+## Reference material
+- [keycloak flask example repo](https://github.com/dangtrinhnt/keycloak_flask)
+- [Creating Admin for keycloak Realm](https://stackoverflow.com/questions/56743109/keycloak-create-admin-user-in-a-realm)
