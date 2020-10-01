@@ -95,3 +95,4 @@ avro-python3
 kafka-python
 pytest
 pymongo
+pyspark==3.0.1

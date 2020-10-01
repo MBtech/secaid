@@ -15,7 +15,7 @@ _topic_names = TopicDto.topic_list
 class TopicList(Resource):
     @api.doc('list of available topics')
     @api.marshal_with(_topic_names)
-    # @token_required
+    @token_required
     def get(self):
         """List all available topics"""
         return get_all_topics()
@@ -25,7 +25,7 @@ class CreateTopic(Resource):
     @api.response(201, 'New Kafka topic Created.')
     @api.doc('create a new Kafka topic')
     @api.expect(_topic, validate=True)
-    # @token_required
+    @token_required
     def post(self):
         """Creates a new Kafka Topic """
         data = request.json
@@ -38,7 +38,7 @@ class GetSchema(Resource):
     @api.response(201, 'Topic Schema returned.')
     @api.doc('return the schema of a kafka topic')
     @api.marshal_with(_schema, envelope='data')
-    # @token_required
+    @token_required
     def get(self, topic_name):
         """ Return the scheme of a kafka topic """
         return get_topic_schema(topic_name)

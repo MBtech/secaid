@@ -49,7 +49,3 @@ def get_job_by_id(job_id):
             'message': 'This stub is empty at the moment',
         }
     return response_object, 200
-
-def save_changes(data):
-    db.session.add(data)
-    db.session.commit()

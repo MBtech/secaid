@@ -22,24 +22,28 @@ def load_user():
     g.access_token = session.get('access_token')
 
 
-# @app.route('/login', methods=['GET', 'POST'])
 def login(data):
     oidc_obj = get_oidc()
     token = get_token(oidc_obj, data["username"], data["password"])
     print("\nTOKEN: %s\n" % token)
-    # response = make_response(redirect(url_for('home')))
+
     if token:
-        # response.set_cookie('access_token', token['access_token'])
+        
         session['access_token'] = token['access_token']
         session['username'] = data["username"]
-    response_object = {
+        response_object = {
             'status': 'success',
             'message': 'Successfully logged in'
         }
-    return response_object, 201
+        response = make_response(response_object, 201)
+        response.set_cookie('access_token', token['access_token'])
+        return response
+    response_object = {
+            'status': 'failed',
+            'message': 'User not found'
+        }    
+    return response_object, 409
 
-
-# @app.route('/logout')
 def logout():
     session.pop('username', None)
     session.pop('access_token', None)
@@ -50,8 +54,6 @@ def logout():
     return response_object, 201
 
 
-
-# @app.route('/register', methods=['GET', 'POST'])
 def register(data):
     print(data)
     admin = get_admin()
