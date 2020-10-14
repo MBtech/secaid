@@ -2,12 +2,13 @@ import io
 import avro.schema
 import avro.io
 from kafka import KafkaConsumer
+from kafka.structs import TopicPartition
 
 brokers = ['kafka.se-caid.org:9092']
 
 # To consume messages
 CONSUMER = KafkaConsumer("traffic-data",
-                        #  group_id='my-group',
+                         group_id='my-group',
                         auto_offset_reset = 'earliest',
                          bootstrap_servers=brokers)
 
