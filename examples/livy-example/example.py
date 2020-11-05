@@ -33,7 +33,13 @@ batch = LivyBatch.create(
     class_name="org.apache.spark.examples.SparkPi",
     verify=False,
     spark_conf= {
-                "spark.kubernetes.namespace": "livy"
+                "spark.kubernetes.namespace": "spark-cluster",
+                "spark.kubernetes.driver.volumes.persistentVolumeClaim.pvc-ddc9eeec-db5f-4134-bb01-becd180ac671.mount.path": "/data",
+                "spark.kubernetes.driver.volumes.persistentVolumeClaim.pvc-ddc9eeec-db5f-4134-bb01-becd180ac671.mount.readOnly": False,
+                "spark.kubernetes.driver.volumes.persistentVolumeClaim.pvc-ddc9eeec-db5f-4134-bb01-becd180ac671.options.claimName":"events-dir"
+                "spark.kubernetes.executor.volumes.persistentVolumeClaim.pvc-ddc9eeec-db5f-4134-bb01-becd180ac671.mount.path": "/data",
+                "spark.kubernetes.executor.volumes.persistentVolumeClaim.pvc-ddc9eeec-db5f-4134-bb01-becd180ac671.mount.readOnly": False,
+                "spark.kubernetes.executor.volumes.persistentVolumeClaim.pvc-ddc9eeec-db5f-4134-bb01-becd180ac671.options.claimName":"events-dir"
             },
 )
 # batch.wait()
