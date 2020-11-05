@@ -1,0 +1,167 @@
+# Default values for spark-services.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+tags:
+  livy: true
+  historyserver: true
+  jupyterhub: false
+
+nameOverride: ""
+fullnameOverride: ""
+
+livy:
+
+  image:
+    repository: sasnouskikh/livy
+    # TODO: There is a problem with the 3.0.x Spark images that I need to figure out before using it.
+    tag: 0.7.0-incubating-spark_2.4.5_2.11-hadoop_3.1.0_cloud
+    pullPolicy: IfNotPresent
+
+  rbac:
+    create: true
+
+  service:
+    name: livy-server
+  
+  ingress:
+    enabled: false
+  
+  env:
+    LIVY_SPARK_KUBERNETES_CONTAINER_IMAGE: {value: "sasnouskikh/livy-spark:0.7.0-incubating-spark_2.4.5_2.11-hadoop_3.1.0_cloud"}
+    # Configure History Server log directory to write Spark logs to
+    LIVY_SPARK_EVENT1LOG_ENABLED: {value: "true"}
+    LIVY_SPARK_EVENT1LOG_DIR: {value: "file:///data"}
+  
+  persistence:
+    enabled: false
+    # subPath: ""
+
+    ## If defined, will use the existing PVC and will not create a new one.
+    # existingClaim: "events-dir"
+
+historyserver:
+
+  image:
+    repository: sasnouskikh/history-server
+    # https://github.com/jahstreet/spark-history-server-docker/blob/spark-3.0.1/Dockerfile
+    tag: 2.4.0-lightbend
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port:
+      number: 80
+      name: http-historyport
+
+  ingress:
+    enabled: false
+
+  # Configure these values properly based on the PV and PVC names
+  # Make sure that pvc.existingClaimName==nfs.pvcName
+  pvc:
+    enablePVC: true
+    existingClaimName: events-dir
+    eventsDir: "/"
+  nfs:
+    enableExampleNFS: false
+    pvcName: events-dir
+    pvName: pvc-ddc9eeec-db5f-4134-bb01-becd180ac671
+
+
+notebooks:
+  examples:
+    fromDir: notebooks
+
+jupyterhub:
+
+  ingress:
+    enabled: false
+
+  hub:
+
+    # Cookie secret to use, to generate run:
+    # $> openssl rand -hex 32
+    cookieSecret: ""
+
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+
+  proxy:
+
+    https:
+      enabled: false
+
+    # Secret token to use, to generate run:
+    # $> openssl rand -hex 32
+    secretToken: ""
+
+    service:
+      type: ClusterIP
+    
+    # configurable-http-proxy
+    chp:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+
+
+  auth:
+
+    type: dummy
+    whitelist:
+      users:
+      - admin
+    admin:
+      access: true
+      users:
+      - admin
+    dummy:
+      password: admin
+
+  singleuser:
+    startTimeout: 600
+    
+    storage:
+      capacity: 2Gi
+      homeMountPath: /home/jovyan/notebooks
+      extraVolumes:
+      - name: spark-cluster-notebooks-examples
+        configMap:
+          name: spark-cluster-notebooks-examples
+      extraVolumeMounts:
+      - name: spark-cluster-notebooks-examples
+        mountPath: /home/jovyan/notebooks/examples
+        readOnly: true
+    
+    image:
+      name: sasnouskikh/jupyter
+      tag: 4.6.3-sparkmagic_0.15.0
+      pullPolicy: Always
+
+    cpu:
+      limit: 0.5
+      guarantee: 0.25
+    memory:
+      limit: 2G
+      guarantee: 1G
+
+    profileList:
+    # https://jupyter-docker-stacks.readthedocs.io/en/latest/using/specifics.html#apache-spark
+    - display_name: "Jupyter Notebooks"
+      description: "Sparkmagic kernel"
+      default: True
+      # https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner
+      kubespawner_override:
+        environment:
+          # For Sparkmagic Kernel
+          LIVY_ENDPOINT: "http://livy-server:80"
+        cmd:
+        - "/opt/singleuser-entrypoint.sh"
+        - "--NotebookApp.notebook_dir=/home/jovyan/notebooks"
+
+  debug:
+    enabled: false
