@@ -54,15 +54,18 @@ class JobDto:
         
     })
     job_upload_parser = api.parser()
-    job_upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
-    job_upload_parser.add_argument('framework', location='form', type=str, help="Framework for the job", required=True)
-    job_upload_parser.add_argument('name', location='form', type=str, help="Name of the job", required=True)
-    job_upload_parser.add_argument('num_executors', location='form', type=int, help="Number of Executors", required=True)
-    job_upload_parser.add_argument('executor_cores', location='form', type=int, help="Number of Cores per Executor", required=False, default=2)
-    job_upload_parser.add_argument('executor_memory', location='form', type=str, help="Amount of memory per executor", required=False, default="4g")
-    job_upload_parser.add_argument('driver_memory', location='form', type=str, help="Amount of memory for driver", required=False, default="4g")
-    job_upload_parser.add_argument('driver_cores', location='form', type=int, help="Number of cores for driver", required=False, default=1)
-
+    # job_upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
+    job_upload_parser.add_argument('file', location='json', type=str, help="Execution file", required=True)
+    job_upload_parser.add_argument('name', location='json', type=str, help="Name of the job", required=True)
+    job_upload_parser.add_argument('class_name', location='json', type=str, help="Class Name when file is a Jar", required=False, default=None)
+    job_upload_parser.add_argument('framework', location='json', type=str, help="Framework for the job", required=False, default="Spark")
+    job_upload_parser.add_argument('num_executors', location='json', type=int, help="Number of Executors", required=False, default=1)
+    job_upload_parser.add_argument('executor_cores', location='json', type=int, help="Number of Cores per Executor", required=False, default=2)
+    job_upload_parser.add_argument('executor_memory', location='json', type=str, help="Amount of memory per executor", required=False, default="4g")
+    job_upload_parser.add_argument('driver_memory', location='json', type=str, help="Amount of memory for driver", required=False, default="4g")
+    job_upload_parser.add_argument('driver_cores', location='json', type=int, help="Number of cores for driver", required=False, default=1)
+    job_upload_parser.add_argument('jars', location='json', type=list, help="Jar dependencies", required=False, default=None)
+    job_upload_parser.add_argument('py_files', location='json', type=list, help="Python dependencies", required=False, default=None)
 
 
 # DTO for Quota object

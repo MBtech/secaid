@@ -11,15 +11,6 @@ Working in progress backend REST Server for SE-CAID Platform
 `pip install -r requirements.txt`
 
 ## Setup
-Initiate a migration folder using `init` command for alembic to perform the migrations
-`python manage.py db init`
-
-Create a migration script from detected changes in the model
-`python manage.py db migrate --message 'initial database migration'`
-
-Apply the migration script to the database
-`python manage.py db upgrade`
-
 Build and push the docker image: `cd rest; ./build_and_push.sh`
 
 Make sure you have `Direct Access Grants Enabled` in the settings of the keycloak Client ID that you are using
@@ -28,8 +19,12 @@ Set Keycloak setting based on the template in `app/main/util/keycloak_settings.p
 
 Set `export KEYCLOAK_FLASK_SETTINGS=local_settings.py` to point to the keycloak settings file 
 
+Do port forwarding `secaid port-forward -n mongodb svc/mongodb 27017:27017 &`
+
+Create a `config.json` file in the `rest/` directory based on `config_template.json`. This file contains the configurations for the mongodb cluster
 
 ## Testing 
+**Note:** Testing code is not up to date
 `python manage.py test`
 
 ## Start server

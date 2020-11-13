@@ -4,8 +4,11 @@ from pymongo import MongoClient
 
 def get_quota_info(user_id):
     # Access quota collection
-    quotas = db['quotas']
-    user_quota_info = quotas.find_one({"user_id": user_id})
+    userinfo_col = db['userinfo']
+    user_quota_info = userinfo_col.find_one(
+                                    {"user_id": user_id}, 
+                                    {"remaining_quota": 1, "total_quota": 1}
+                                    )
     print(user_id)
     print(user_quota_info)
     if user_quota_info is None:

@@ -1,9 +1,10 @@
-from flask import request
+from flask import request, session
 from flask_restx import Resource
 
 from ..util.dto import JobDto
-from ..service.job_service import get_all_jobs, create_new_job, get_job_by_id
+from ..service.job_service import get_all_jobs, create_new_job, get_job_by_id, submit_job
 from ..util.decorator import token_required
+from ..util.keycloak_utils import get_userinfo
 
 api = JobDto.api
 _job = JobDto.job
@@ -18,8 +19,15 @@ class SubmitJob(Resource):
     @token_required
     def post(self):
         """Creates a new Analytics job """
+        access_token = session.get('access_token')
+        userinfo = get_userinfo(access_token)
+        # print(userinfo)
+        userid = userinfo["sub"]
+        print(userid)
         data = job_parser.parse_args()
-        return create_new_job(data=data)
+        print(data)
+        # return submit_job(**data)
+        return create_new_job(userid, **data)
 
 @api.route('/info')
 class JobInfoAll(Resource):
