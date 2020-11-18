@@ -15,9 +15,9 @@ Build and push the docker image: `cd rest; ./build_and_push.sh`
 
 Make sure you have `Direct Access Grants Enabled` in the settings of the keycloak Client ID that you are using
 
-Set Keycloak setting based on the template in `app/main/util/keycloak_settings.py`
+Set appropriate settings based on the template in `app/main/util/settings.py`
 
-Set `export KEYCLOAK_FLASK_SETTINGS=local_settings.py` to point to the keycloak settings file 
+Set `export SETTINGS=local_settings.py` to point to the keycloak settings file 
 
 Do port forwarding `secaid port-forward -n mongodb svc/mongodb 27017:27017 &`
 
