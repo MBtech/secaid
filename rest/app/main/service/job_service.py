@@ -6,6 +6,7 @@ from pymongo import MongoClient
 import requests
 import json
 from ..util.helpers import get_consumed_resources
+from ..util.mongo_helpers import get_mongo_conn
 
 from app.main import db
 
@@ -13,19 +14,6 @@ from app.main import db
 # LIVY_URL = "http://localhost:8998"
 LIVY_URL = "http://livy.se-caid.org"
 history_server_url = "https://history.se-caid.org"
-
-config = json.load(open("config.json"))
-mongo_host_ip = config["mongo_ip"]
-mongo_host_port = config["mongo_port"]
-username = config["mongo_username"]
-password = config["mongo_password"]
-database = config["database"]
-client = MongoClient(host=mongo_host_ip, port=mongo_host_port,
-                    username = username,
-                    password = password,
-                    authSource=database
-                    )
-db = client[database]
 
 def submit_job(userid, **data):
     try:
@@ -60,8 +48,7 @@ def submit_job(userid, **data):
         print(batch.state)
         with open(jobid+".log", 'w') as f:
             f.writelines(batch.log())
-        idQ.put(jobid)
-
+            
     except:
         print("An exception has occurred. Terminating the call")
         # return -1 
@@ -73,6 +60,7 @@ def submit_job(userid, **data):
     ## What if jobs in the application fails
     job_runtime = job_json_data["attempts"][0]["duration"]/1000.0
 
+    db = get_mongo_conn()
     userinfo_col = db['userinfo']
     ret = userinfo_col.find_one({'id': userid})
     if ret == None:
@@ -114,10 +102,17 @@ def create_new_job(userid, **data):
     return response_object, 200
 
 
-def get_all_jobs():
+def get_all_jobs(userid):
+    db = get_mongo_conn()
+    userinfo_col = db['userinfo']
+    ret = userinfo_col.find_one({'id': userid})
+    if ret == None:
+        job_ids = []
+    else:
+        job_ids = ret['jobs']
+        
     response_object = {
-            'status': 'Success',
-            'message': 'This stub is empty at the moment',
+            job_ids
         }
     return response_object, 200
 

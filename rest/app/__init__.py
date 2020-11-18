@@ -1,7 +1,7 @@
 from flask_restx import Api
 from flask import Blueprint
 
-from .main.controller.user_controller import api as user_ns
+# from .main.controller.user_controller import api as user_ns
 from .main.controller.auth_controller import api as auth_ns
 from .main.controller.topic_controller import api as topic_ns
 from .main.controller.job_controller import api as job_ns
@@ -15,7 +15,7 @@ api = Api(blueprint,
           description='A WIP backend rest server for SE-CAID' 
           )
 
-api.add_namespace(user_ns, path='/user')
+# api.add_namespace(user_ns, path='/user')
 api.add_namespace(auth_ns)
 api.add_namespace(topic_ns)
 api.add_namespace(job_ns)

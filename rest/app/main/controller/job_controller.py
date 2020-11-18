@@ -36,7 +36,12 @@ class JobInfoAll(Resource):
     @token_required
     def get(self):
         """List all jobs"""
-        return get_all_jobs()
+        access_token = session.get('access_token')
+        userinfo = get_userinfo(access_token)
+        # print(userinfo)
+        userid = userinfo["sub"]
+        # print(userid)
+        return get_all_jobs(userid)
 
     
 @api.route('/<int:job_id>/info')

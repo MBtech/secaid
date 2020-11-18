@@ -23,7 +23,9 @@ class AuthDto:
     user = api.model('user', {
         'email': fields.String(required=True, description='user email address'),
         'username': fields.String(required=True, description='user username'),
+        'organization': fields.String(required=True, description='user organization'),
         'password': fields.String(required=True, description='user password')
+
     })
 
 # DTO for Kafka topics

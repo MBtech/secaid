@@ -10,10 +10,11 @@ def get_admin():
                          verify=True)
 
 
-def create_user(admin, username, email, password):
+def create_user(admin, username, email, password, organization):
     return admin.create_user({"email": email,
                               "username": username,
                               "credentials": [{"value": password,"type": "password",}],
+                            #   "organization": organization,
                               "enabled": True,
                               "realmRoles": ["user",]})
 

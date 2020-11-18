@@ -6,13 +6,14 @@ from flask_script import Manager
 
 from app.main import create_app, db
 from app import blueprint
+
 # Import models
-from app.main.model import user
-from app.main.model import blacklist
+# from app.main.model import user
+# from app.main.model import blacklist
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
 # app.config.from_object('app.util.keycloak_settings')
-app.config.from_envvar('KEYCLOAK_FLASK_SETTINGS')
+app.config.from_envvar('SETTINGS')
 
 app.register_blueprint(blueprint)
 

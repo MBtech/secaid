@@ -4,27 +4,27 @@ from flask_restx import Resource
 from ..util.dto import UserDto
 
 from ..util.decorator import token_required
-from ..service.user_service import save_new_user, get_all_users, get_a_user
+from ..service.user_service import get_a_user
 
 api = UserDto.api
 _user = UserDto.user
 
 
-@api.route('/')
-class UserList(Resource):
-    # @api.doc('List of registered users')
-    # @api.marshal_list_with(_user, envelope='data')
-    # def get(self):
-    #     """List all registered users"""
-    #     return get_all_users()
+# @api.route('/')
+# class UserList(Resource):
+#     # @api.doc('List of registered users')
+#     # @api.marshal_list_with(_user, envelope='data')
+#     # def get(self):
+#     #     """List all registered users"""
+#     #     return get_all_users()
 
-    @api.response(201, 'User successfully created.')
-    @api.doc('create a new user')
-    @api.expect(_user, validate=True)
-    def post(self):
-        """Creates a new User """
-        data = request.json
-        return save_new_user(data=data)
+#     @api.response(201, 'User successfully created.')
+#     @api.doc('create a new user')
+#     @api.expect(_user, validate=True)
+#     def post(self):
+#         """Creates a new User """
+#         data = request.json
+#         return save_new_user(data=data)
 
 
 @api.route('/<public_id>')
