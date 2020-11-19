@@ -17,7 +17,7 @@ Make sure you have `Direct Access Grants Enabled` in the settings of the keycloa
 
 Set appropriate settings based on the template in `app/main/util/settings.py`
 
-Set `export SETTINGS=local_settings.py` to point to the keycloak settings file 
+Set `export SETTINGS=<path to the settings file>` to point to the keycloak settings file 
 
 Do port forwarding `secaid port-forward -n mongodb svc/mongodb 27017:27017 &`
 

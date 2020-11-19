@@ -1,8 +1,9 @@
-from flask import request, session
+from flask import request, session, send_from_directory
 from flask_restx import Resource
+import os 
 
 from ..util.dto import JobDto
-from ..service.job_service import get_all_jobs, create_new_job, get_job_by_id, submit_job
+from ..service.job_service import get_all_jobs, create_new_job, get_logs_by_id, submit_job, get_results_by_id
 from ..util.decorator import token_required
 from ..util.keycloak_utils import get_userinfo
 
@@ -22,12 +23,12 @@ class SubmitJob(Resource):
         access_token = session.get('access_token')
         userinfo = get_userinfo(access_token)
         # print(userinfo)
-        userid = userinfo["sub"]
-        print(userid)
+        user_id = userinfo["sub"]
+        print(user_id)
         data = job_parser.parse_args()
         print(data)
         # return submit_job(**data)
-        return create_new_job(userid, **data)
+        return create_new_job(user_id, **data)
 
 @api.route('/info')
 class JobInfoAll(Resource):
@@ -39,36 +40,49 @@ class JobInfoAll(Resource):
         access_token = session.get('access_token')
         userinfo = get_userinfo(access_token)
         # print(userinfo)
-        userid = userinfo["sub"]
+        user_id = userinfo["sub"]
         # print(userid)
-        return get_all_jobs(userid)
+        return get_all_jobs(user_id)
 
     
-@api.route('/<int:job_id>/info')
+@api.route('/<string:job_id>/log')
 @api.param('job_id', 'The Job identifier')
 @api.response(404, 'Job not found.')
-class JobInfo(Resource):
-    @api.doc('Retrieve job info by Id')
-    @api.marshal_with(_job)
+class JobLog(Resource):
+    @api.doc('Retrieve job logs by Id')
+    # @api.marshal_with(_job)
     @token_required
     def get(self, job_id):
-        """Retrieve job info by Id"""
-        job_info = get_job_by_id(job_id)
-        if not job_info:
-            api.abort(404)
-        else:
-            return job_info
+        """Retrieve job logs by Id"""
+        access_token = session.get('access_token')
+        userinfo = get_userinfo(access_token)
+        user_id = userinfo["sub"]
+        job_logs, response_code = get_logs_by_id(user_id, job_id)
 
-@api.route('/<int:job_id>/result')
+        if job_logs['filename'] == None:
+            return {'message': 'Job not found'}, 404
+
+        try:
+            return send_from_directory('../../../logs', job_logs['filename'], as_attachment=True)
+        except FileNotFoundError:
+            return {'message': 'File not found'}, 404
+
+
+
+@api.route('/<string:job_id>/result')
 @api.param('job_id', 'The Job identifier')
 @api.response(404, 'Job not found.')
-class JobInfo(Resource):
+class JobResult(Resource):
     @api.doc('Retrieve job result by Job Id')
     @api.marshal_with(_job)
     @token_required
     def get(self, job_id):
         """Retrieve job result by Job ID"""
-        job_info = get_job_by_id(job_id)
+        access_token = session.get('access_token')
+        userinfo = get_userinfo(access_token)
+        user_id = userinfo["sub"]
+
+        job_info = get_results_by_id(user_id, job_id)
         if not job_info:
             api.abort(404)
         else:

@@ -13,9 +13,9 @@ _quota_info = QuotaDto.quota_info
 @api.route('/')
 @api.response(404, 'Quota information not found.')
 class GetSchema(Resource):    
-    @api.response(201, 'Quota Information Returned')
+    @api.response(200, 'Quota Information Returned')
     @api.doc('return the quota information of a user')
-    @api.marshal_with(_quota_info, envelope='data')
+    # @api.marshal_with(_quota_info, envelope='data')
     @token_required
     def get(self):
         """ Return the quota information of a user """
@@ -24,4 +24,6 @@ class GetSchema(Resource):
         # print(userinfo)
         userid = userinfo["sub"]
         # print(userid)
-        return get_quota_info(userid)
+        return_dict, _ = get_quota_info(userid)
+        del return_dict['_id']
+        return return_dict

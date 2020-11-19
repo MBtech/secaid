@@ -7,7 +7,7 @@ def get_quota_info(user_id):
     # Access quota collection
     userinfo_col = db['userinfo']
     user_quota_info = userinfo_col.find_one(
-                                    {"user_id": user_id}, 
+                                    {"id": user_id}, 
                                     {"remaining_quota": 1, "total_quota": 1}
                                     )
     print(user_id)
@@ -17,6 +17,6 @@ def get_quota_info(user_id):
             'status': 'fail',
             'message': 'User not found',
         }
-        return response_object, 409
+        return response_object, 404
 
     return user_quota_info, 200

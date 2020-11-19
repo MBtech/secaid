@@ -13,3 +13,4 @@ def get_mongo_conn():
                         authSource=database
                         )
     db = client[database]
+    return db
