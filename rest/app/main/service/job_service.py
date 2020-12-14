@@ -55,8 +55,9 @@ def submit_job(userid, **data):
         with open(jobid+".log", 'w') as f:
             f.writelines(batch.log())
             
-    except:
+    except Exception as e:
         print("An exception has occurred. Terminating the call")
+        print(e)
         # return -1 
         jobid = "1"
 

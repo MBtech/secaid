@@ -7,7 +7,7 @@ def get_admin():
                          username=current_app.config.get('ADMIN_USERNAME'),
                          password=current_app.config.get('ADMIN_PASS'),
                          realm_name=current_app.config.get('REALM_NAME'),
-                         verify=True)
+                         verify=False)
 
 
 def create_user(admin, username, email, password, organization):
@@ -24,7 +24,7 @@ def get_oidc():
                           client_id=current_app.config.get('CLIENT_ID'),
                           realm_name=current_app.config.get('REALM_NAME'),
                           client_secret_key=current_app.config.get('CLIENT_SECRET'),
-                          verify=True)
+                          verify=False)
 
 
 def get_token(oidc_obj, username, password):

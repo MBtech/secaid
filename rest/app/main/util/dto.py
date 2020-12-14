@@ -46,6 +46,18 @@ class TopicDto:
         'topic_schema': fields.String(required=True, description='Kafka Topic Avro Schema'),
     })
 
+# DTO for Cassandra Datasets
+class DatasetDto:
+    api = Namespace('dataset', description='Dataset related operations')
+
+    dataset_list = api.model('dataset_list', {
+        'dataset_names': fields.List(fields.String(description='Dataset names'))
+    })
+
+    schema = api.model('dataset_schema', {
+        'dataset_schema': fields.String(required=True, description='Dataset Schema'),
+    })
+
 # DTO for Job object
 class JobDto:
     api = Namespace('job', description='Analytics job related operations')
