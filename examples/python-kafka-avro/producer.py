@@ -7,7 +7,7 @@ from kafka import KafkaClient
 from kafka.admin import KafkaAdminClient, NewTopic
 import pandas as pd
 
-brokers = ['kafka.se-caid.org:9092']
+brokers = ['kafka-topics-ui.109.225.89.133.xip.io:9092']
 
 producer = KafkaProducer(bootstrap_servers=brokers)
 topic_name = "traffic-data"

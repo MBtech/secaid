@@ -33,7 +33,7 @@ class SubmitJob(Resource):
 @api.route('/info')
 class JobInfoAll(Resource):
     @api.doc('List of jobs for the user')
-    @api.marshal_list_with(_job, envelope='data')
+    # @api.marshal_list_with(_job, envelope='data')
     @token_required
     def get(self):
         """List all jobs"""
@@ -47,7 +47,7 @@ class JobInfoAll(Resource):
     
 @api.route('/<string:job_id>/log')
 @api.param('job_id', 'The Job identifier')
-@api.response(404, 'Job not found.')
+@api.response(404, 'Job not found or File not found')
 class JobLog(Resource):
     @api.doc('Retrieve job logs by Id')
     # @api.marshal_with(_job)
@@ -60,11 +60,15 @@ class JobLog(Resource):
         job_logs, response_code = get_logs_by_id(user_id, job_id)
 
         if job_logs['filename'] == None:
+            print(job_logs)
             return {'message': 'Job not found'}, 404
 
         try:
-            return send_from_directory('../../../logs', job_logs['filename'], as_attachment=True)
-        except FileNotFoundError:
+            print(os.getcwd())
+            print(job_logs)
+            return send_from_directory('/Users/mb/repos/se-caid/rest/logs', job_logs['filename'], as_attachment=True)
+        except Exception as e:
+            print(e)
             return {'message': 'File not found'}, 404
 
 

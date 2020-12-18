@@ -37,7 +37,7 @@ class CreateTopic(Resource):
 class GetSchema(Resource):    
     @api.response(201, 'Topic Schema returned.')
     @api.doc('return the schema of a kafka topic')
-    @api.marshal_with(_schema, envelope='data')
+    # @api.marshal_with(_schema, envelope='data')
     @token_required
     def get(self, topic_name):
         """ Return the scheme of a kafka topic """

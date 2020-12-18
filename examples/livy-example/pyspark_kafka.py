@@ -30,7 +30,7 @@ if __name__ == "__main__":
         Read data and process data from Kafka as a batch job
     """
     # KAFKA_BROKER="10.43.43.139:9092"
-    KAFKA_BROKER="kafka.se-caid.org:9092"
+    KAFKA_BROKER="kafka-topics-ui.109.225.89.133.xip.io:9092"
 
     # SCHEMA_PATH = "traffic.avsc"
     # SCHEMA = open(SCHEMA_PATH).read()
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     spark = SparkSession\
         .builder\
-        .appName("PySpark-Kafka-1")\
+        .appName("PySpark-Kafka-2")\
         .getOrCreate()
     
     df = spark \

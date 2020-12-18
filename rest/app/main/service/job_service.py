@@ -12,12 +12,10 @@ from flask import current_app
 from ..util.helpers import get_consumed_resources, available_quota
 from ..util.mongo_helpers import get_mongo_conn
 
-from app.main import db
-
 # TODO: This needs to be configurable
 # LIVY_URL = "http://localhost:8998"
-LIVY_URL = "http://livy.se-caid.org"
-history_server_url = "https://history.se-caid.org"
+LIVY_URL = "http://livy.109.225.89.133.xip.io"
+history_server_url = "http://history.109.225.89.133.xip.io"
 # Create the logs directory if it doesn't exist
 os.makedirs('logs', exist_ok=True)
 
@@ -127,7 +125,8 @@ def get_all_jobs(userid):
         job_ids = ret['jobs']
         
     response_object = {
-            job_ids
+            'status': 'Success',
+            'job_ids': job_ids,
         }
     return response_object, 200
 
@@ -142,9 +141,10 @@ def get_logs_by_id(user_id, job_id):
         return {'filename': None}, 404
 
     # If the job belongs to the user
-    target_path =  user_id + '-logs.zip'
-    # print(history_server_url + "/api/v1/applications/"+job_id+"/logs")
+    target_path =  job_id + '-logs.zip'
+    print(history_server_url + "/api/v1/applications/"+job_id+"/logs")
     response = requests.get(history_server_url + "/api/v1/applications/"+job_id+"/logs", verify=False, stream=True)
+    print(response.status_code)
     if response.status_code == 404:
         return {'filename': None}, 404
 

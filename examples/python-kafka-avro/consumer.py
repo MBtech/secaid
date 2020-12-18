@@ -4,7 +4,7 @@ import avro.io
 from kafka import KafkaConsumer
 from kafka.structs import TopicPartition
 
-brokers = ['kafka.se-caid.org:9092']
+brokers = ['kafka-topics-ui.109.225.89.133.xip.io:9092']
 
 # To consume messages
 CONSUMER = KafkaConsumer("traffic-data",
